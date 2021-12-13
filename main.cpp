@@ -29,8 +29,7 @@ int anagram(std::string inputPath, std::string dictPath) {
 		throw std::invalid_argument("Unable to load the dictionary file");
 	}
 	fin.close();
-	// TODO file read error exception throw
-
+	
 	/*
 	std::cout << "Dictionary:" << std::endl;
 	for (auto elem : dict) {
@@ -69,7 +68,6 @@ int anagram(std::string inputPath, std::string dictPath) {
 
 
 				// Вывод всех престановок для слова, найденных в словаре
-				// TODO вывести ошибку, если слово не найдено
 
 				std::map<
 					std::string,
@@ -85,8 +83,11 @@ int anagram(std::string inputPath, std::string dictPath) {
 							wordsPermutations.at(word).emplace_back(matchElem.first, matchElem.second);
 						}
 					}
+					if (wordsPermutations.at(word).empty()) {
+						fin.close();
+						throw std::runtime_error("Permutations for word '" + word + "' not found");
+					}
 					std::cout << std::endl;
-					
 					std::sort(wordsPermutations.at(word).begin(), wordsPermutations.at(word).end(), 
 							[](std::pair<std::string, int> lhs, std::pair<std::string, int> rhs) { return lhs.second > rhs.second; });
 				}
