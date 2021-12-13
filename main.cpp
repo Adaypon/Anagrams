@@ -9,13 +9,13 @@
 #include <functional>
 #include <limits>
 
-int anagram() {
+int anagram(std::string inputPath, std::string dictPath) {
 	std::string line;
 	std::ifstream fin;
 	std::vector<std::pair<std::string, int>> dict; // словарь со свловами и связанными с ними веса
 
 	// Заполняем словарь	
-	fin.open("dictionary.txt");
+	fin.open(dictPath);
 	if (fin.is_open()) {
 		while (!fin.eof()) {
 			if (getline(fin, line) && !(line.length() == 1 && isspace(line[0]))) {
@@ -24,6 +24,9 @@ int anagram() {
 				dict.emplace_back(word, value);
 			}
 		}
+	}
+	else {
+		throw std::invalid_argument("Unable to load the dictionary file");
 	}
 	fin.close();
 	// TODO file read error exception throw
@@ -37,7 +40,7 @@ int anagram() {
 	*/
 
 	std::vector<std::string> sentenceWords; // вектор слов предложения
-	fin.open("input.txt");
+	fin.open(inputPath);
 	if (fin.is_open()) {
 		while (!fin.eof()) {
 			if (getline(fin, line) && !(line.length() == 1 && isspace(line[0]))) {
@@ -195,10 +198,24 @@ int anagram() {
 			}
 		}
 	}
+	else {
+		throw std::invalid_argument("Unable to load the input file");
+	}
 	fin.close();
 	return 0;
 }
 
-int main() {
-	return anagram();
+int main(int argc, char** argv) {
+	if (argc != 3) {
+		std::cerr << "Invalid number of arguments" << std::endl;
+		return -1;
+	}
+	try {
+		anagram(argv[1], argv[2]);
+	}
+	catch (std::exception& e) {
+		std::cerr << e.what() << std::endl;
+		return -2;
+	}
+	return 0;
 }
