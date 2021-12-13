@@ -83,6 +83,7 @@ int anagram() {
 
 		// Формируем предложение для перестановки
 		std::vector<std::string> permutationSentence;
+		int sentenceWeight = 0;
 		for (auto word : sentenceWords) {
 			std::pair<std::string, int> maxSuitableWord {"", -1};
 			for (auto elem : dict) {
@@ -93,6 +94,7 @@ int anagram() {
 				}
 			}
 			permutationSentence.push_back(maxSuitableWord.first);
+			sentenceWeight += maxSuitableWord.second;
 		}
 
 		std::sort(permutationSentence.begin(), permutationSentence.end());
@@ -102,6 +104,7 @@ int anagram() {
 			for (auto word : permutationSentence) {
 				std::cout << word << " ";
 			}
+			std::cout << "| weight=" << sentenceWeight;
 			std::cout << std::endl;
 			++cnt;
 		} while (std::next_permutation(permutationSentence.begin(), permutationSentence.end()));
